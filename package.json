@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "compile": "tsc --build",
-    "start": "node dist/index.js",
+    "start": "tsc --build && node dist/index.js",
     "dev": "ts-node index.ts",
     "dev:watch": "nodemon",
     "lint": "eslint index.ts ./src"
