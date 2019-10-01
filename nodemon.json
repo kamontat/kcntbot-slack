@@ -2,6 +2,6 @@
   "verbose": true,
   "ignore": ["*.spec.ts"],
   "watch": ["src", "index.ts"],
-  "exec": "yarn start",
+  "exec": "yarn dev",
   "ext": "ts"
 }

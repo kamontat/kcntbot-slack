@@ -33,28 +33,22 @@ const formatWeight = (data: DBObject) => {
   const current = data.list[data.list.length - 1 < 0 ? 0 : data.list.length - 1];
   const previous = data.list[data.list.length - 2 < 0 ? 0 : data.list.length - 2];
 
-  const result = [
-    `จากข้อมูลที่มี... พบว่า ปัจจุบัน น้ำหนักอยู่ที่ ${current.value} กก. ซึ่งอัพเดตเมื่อ ${moment
-      .unix(current.timestamp.seconds)
-      .fromNow()}`,
-  ];
+  let result = `จากข้อมูลที่มี... พบว่า ปัจจุบัน น้ำหนักอยู่ที่ ${current.value} กก. ซึ่งอัพเดตเมื่อ ${moment
+    .unix(current.timestamp.seconds)
+    .fromNow()}\n`;
 
   if (data.list.length > 2) {
     const percent = ((current.value - previous.value) / previous.value) * 100;
-    result.push(
-      `ซึ่ง \`${percent < 0 ? "ผอมลง" : "อ้วนขึ้น"}\` _${percent}%_ จากครั้งที่แล้วที่น้ำหนัก *${
-        previous.value
-      }* กก. และอัพเดตเมื่อ ${moment.unix(previous.timestamp.seconds).fromNow()}`,
-    );
+    result += `ซึ่ง \`${percent < 0 ? "ผอมลง" : "อ้วนขึ้น"}\` _${percent.toFixed(2)}%_ จากครั้งที่แล้วที่น้ำหนัก *${
+      previous.value
+    }* กก. และอัพเดตเมื่อ ${moment.unix(previous.timestamp.seconds).fromNow()}\n`;
   }
 
   if (data.list.length > 3) {
     const percent = ((current.value - first.value) / first.value) * 100;
-    result.push(
-      `และ \`${percent < 0 ? "ผอมลง" : "อ้วนขึ้น"}\` _${percent}%_ จากน้ำหนักเริ่มต้น *${
-        first.value
-      }* กก. เมื่อ ${moment.unix(first.timestamp.seconds).fromNow()}`,
-    );
+    result += `และ \`${percent < 0 ? "ผอมลง" : "อ้วนขึ้น"}\` _${percent.toFixed(2)}%_ จากน้ำหนักเริ่มต้น *${
+      first.value
+    }* กก. เมื่อ ${moment.unix(first.timestamp.seconds).fromNow()}`;
   }
 
   return result;
@@ -90,8 +84,8 @@ const __main: SetupReg = ({ app, firebase, logger }) => {
 
         if (weight.exists) {
           const data = weight.data() as DBObject;
-          const msgs = formatWeight(data);
-          msgs.forEach(m => say(asBlock(m, { thread_ts: message.ts })));
+          const msg = formatWeight(data);
+          say(asBlock(msg, { thread_ts: message.ts }));
 
           logger("found weight, sent the request back");
         } else {
