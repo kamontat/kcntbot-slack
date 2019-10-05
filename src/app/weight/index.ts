@@ -37,14 +37,14 @@ const formatWeight = (data: DBObject) => {
     .unix(current.timestamp.seconds)
     .fromNow()}\n`;
 
-  if (data.list.length > 2) {
+  if (data.list.length > 1) {
     const percent = ((current.value - previous.value) / previous.value) * 100;
     result += `ซึ่ง \`${percent < 0 ? "ผอมลง" : "อ้วนขึ้น"}\` _${percent.toFixed(2)}%_ จากครั้งที่แล้วที่น้ำหนัก *${
       previous.value
     }* กก. และอัพเดตเมื่อ ${moment.unix(previous.timestamp.seconds).fromNow()}\n`;
   }
 
-  if (data.list.length > 3) {
+  if (data.list.length > 2) {
     const percent = ((current.value - first.value) / first.value) * 100;
     result += `และ \`${percent < 0 ? "ผอมลง" : "อ้วนขึ้น"}\` _${percent.toFixed(2)}%_ จากน้ำหนักเริ่มต้น *${
       first.value
