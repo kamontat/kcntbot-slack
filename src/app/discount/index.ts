@@ -46,59 +46,63 @@ const __main: SetupReg = ({ app, logger }) => {
     // [1] -> download counter from appAgg website
     // [2] -> rating counter from app store / play store
     const download = parseInt(findArrayIndex(logger, "download", text.match(/Downloads: (\d+) \+ (\d+)/), 2));
-
-    app.client.chat.postMessage({
-      text: ``,
-      blocks: [
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: `<!here> <${link}|${appName}> (${platform}) is discounted \`${discountMsg}%\`.\n`,
+    
+    if (download > 100) {
+      app.client.chat.postMessage({
+        text: ``,
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `<!here> <${link}|${appName}> (${platform}) is discounted \`${discountMsg}%\`.\n`,
+            },
           },
-        },
-        {
-          type: "divider",
-        },
-        {
-          type: "section",
-          fields: [
-            {
-              type: "mrkdwn",
-              text: `*Price*: \n  ${originalPriceMsg} => ${currentPriceMsg}`,
-            },
-            {
-              type: "mrkdwn",
-              text: `*Category*: \n  ${category}`,
-            },
-            {
-              type: "mrkdwn",
-              text: `*Rating*: \n  ${rating}`,
-            },
-            {
-              type: "mrkdwn",
-              text: `*Download*: \n  ${download}`,
-            },
-            {
-              type: "mrkdwn",
-              text: `*AppAgg*: \n  <${appAggLink}|link>`,
-            },
-          ],
-        },
-        {
-          type: "context",
-          elements: [
-            {
-              type: "mrkdwn",
-              text: `I received ${platform} application discounted from #news-app channel`,
-            },
-          ],
-        },
-      ],
-      token: context.botToken,
-      channel: generalChannelID,
-      mrkdwn: true,
-    });
+          {
+            type: "divider",
+          },
+          {
+            type: "section",
+            fields: [
+              {
+                type: "mrkdwn",
+                text: `*Price*: \n  ${originalPriceMsg} => ${currentPriceMsg}`,
+              },
+              {
+                type: "mrkdwn",
+                text: `*Category*: \n  ${category}`,
+              },
+              {
+                type: "mrkdwn",
+                text: `*Rating*: \n  ${rating}`,
+              },
+              {
+                type: "mrkdwn",
+                text: `*Download*: \n  ${download}`,
+              },
+              {
+                type: "mrkdwn",
+                text: `*AppAgg*: \n  <${appAggLink}|link>`,
+              },
+            ],
+          },
+          {
+            type: "context",
+            elements: [
+              {
+                type: "mrkdwn",
+                text: `I received ${platform} application discounted from #news-app channel`,
+              },
+            ],
+          },
+        ],
+        token: context.botToken,
+        channel: generalChannelID,
+        mrkdwn: true,
+      });
+    } else {
+      logger(`Ignore ${appName} because download number is lower than 100 (${download})`);
+    }
   });
 };
 
