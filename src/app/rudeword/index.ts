@@ -37,12 +37,16 @@ const __main: SetupReg = async ({ app, firebase, logger }) => {
   logger(`Thai database size is ${database.th.length}`);
   logger(`English database size is ${database.en.length}`);
 
-  app.message(new RegExp(`(${database.th.join("|")})`), ({ say, message }) => {
-    say({ text: "ทำไมหยาบคายแบบนี้ :anger:", thread_ts: message.ts });
+  app.message(new RegExp(`(${database.th.join("|")})`), ({ say, message, context }) => {
+    const word = context.matches[1];
+    
+    say({ text: `ทำไมหยาบคายแบบนี้ :anger: ก็เจ้าพูดว่า.. ${word} อะ ข้ารับไม่ได้`, thread_ts: message.ts });
   });
 
-  app.message(new RegExp(`(${database.en.join("|")})`, "i"), ({ say, message }) => {
-    say({ text: "Why you so rude !! :anger:", thread_ts: message.ts });
+  app.message(new RegExp(`(${database.en.join("|")})`, "i"), ({ say, message, context }) => {
+    const word = context.matches[1];
+    
+    say({ text: `Why you so rude !! :anger: I just said ${word} I feel very bad`, thread_ts: message.ts });
   });
 
   firebase
