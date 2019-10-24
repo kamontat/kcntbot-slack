@@ -57,16 +57,16 @@ const formatWeight = (data: DBObject) => {
 const __main: SetupReg = ({ app, firebase, logger }) => {
   logger("Start setup weight apps");
 
-  app.message(/(น้ำหนัก|หนัก|weight)/i, async ({ say, message }) => {
-    say(
-      asBlock("คุยเรื่องน้ำหนักหรออ.. ถ้าอยากรู้น้ำหนักลอง tag คนนั้นดูสิ :) แต่ฉันหนักเป็นตันเลยนะ", {
-        thread_ts: message.ts,
-      }),
-    );
-  });
+  // app.message(/(น้ำหนัก|หนัก|weight)/i, async ({ say, message }) => {
+  //   say(
+  //     asBlock("คุยเรื่องน้ำหนักหรออ.. ถ้าอยากรู้น้ำหนักลอง tag คนนั้นดูสิ :) แต่ฉันหนักเป็นตันเลยนะ", {
+  //       thread_ts: message.ts,
+  //     }),
+  //   );
+  // });
 
   // get weight from database
-  app.message(/<@(.*)> (น้ำหนัก|หนัก|weight).*/i, async ({ say, message, context }) => {
+  app.message(/<@(.*)> (น้ำหนักเท่าไร|หนักเท่าไร|weight).*/i, async ({ say, message, context }) => {
     logger("search user weight");
 
     const userID = context.matches[1];
@@ -102,7 +102,7 @@ const __main: SetupReg = ({ app, firebase, logger }) => {
   });
 
   // set weight to database
-  app.message(/(\d*\.?\d*) ?(น้ำหนัก|หนัก|weight) ?(\d*\.?\d*)/i, async ({ say, message, context }) => {
+  app.message(/(\d*\.?\d*) ?(น้ำหนัก|หนัก) ?(\d*\.?\d*)/i, async ({ say, message, context }) => {
     // logger("the regex return %O", context.matches);
 
     const numbers = (context.matches as Array<string | undefined>).reduce(
@@ -121,7 +121,7 @@ const __main: SetupReg = ({ app, firebase, logger }) => {
       return say(asBlock("ใส่ตัวเลขบ่อยไปละ ไม่รู้จะเอาค่าไหนดีเลยย", { thread_ts: message.ts }));
     } else if (numbers.length < 1) {
       logger.extend("error")("cannot parse weight number from context");
-      return say({ text: "อย่าลืมใส่น้ำหนักสิ", thread_ts: message.ts });
+      // return say({ text: "อย่าลืมใส่น้ำหนักสิ", thread_ts: message.ts });
     }
 
     const weightNumber = numbers.pop()!;
