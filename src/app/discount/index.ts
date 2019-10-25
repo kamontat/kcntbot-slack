@@ -47,7 +47,7 @@ const __main: SetupReg = ({ app, logger }) => {
     // [2] -> rating counter from app store / play store
     const download = parseInt(findArrayIndex(logger, "download", text.match(/Downloads: (\d+) \+ (\d+)/), 2));
     
-    if (download > 100) {
+    if (download > 500) {
       app.client.chat.postMessage({
         text: ``,
         blocks: [
