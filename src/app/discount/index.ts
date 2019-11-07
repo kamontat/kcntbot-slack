@@ -13,6 +13,13 @@ const findArrayIndex = (logger: debug.Debugger, name: string, arr: RegExpMatchAr
   return "undefined";
 };
 
+// {download, discount, originalPrice, platform, currentPrice}
+const only = (data: {platform: string, download: number, discount: number, originalPrice: number, currentPrice: number}) => {
+  if (data.download < 1000) return `download value is only ${data.download}`;
+
+  return undefined;
+}
+
 const __main: SetupReg = ({ app, logger }) => {
   logger("Start setup discount apps");
 
@@ -47,7 +54,8 @@ const __main: SetupReg = ({ app, logger }) => {
     // [2] -> rating counter from app store / play store
     const download = parseInt(findArrayIndex(logger, "download", text.match(/Downloads: (\d+) \+ (\d+)/), 2));
     
-    if (download > 500) {
+    const errorMsg = only({download, discount, originalPrice, platform, currentPrice});
+    if (!errorMsg) {
       app.client.chat.postMessage({
         text: ``,
         blocks: [
@@ -101,7 +109,7 @@ const __main: SetupReg = ({ app, logger }) => {
         mrkdwn: true,
       });
     } else {
-      logger(`Ignore ${appName} because download number is lower than 100 (${download})`);
+      logger(`Ignore ${appName} because ${errorMsg}`);
     }
   });
 };
