@@ -20,6 +20,13 @@ const only = (data: {platform: string, download: number, discount: number, origi
   return undefined;
 }
 
+const parseToNumber = (str: String) => {
+  const num = parseFloat(str)
+
+  if (isNaN(num)) return 0
+  else return num
+}
+
 const __main: SetupReg = ({ app, logger }) => {
   logger("Start setup discount apps");
 
@@ -38,21 +45,21 @@ const __main: SetupReg = ({ app, logger }) => {
 
     const __priceRegex = /Price\: \$?(\w+.?\w+) \$?(\w+.?\w+)/;
 
-    const originalPrice = parseFloat(findArrayIndex(logger, "original price", text.match(__priceRegex), 2));
+    const originalPrice = parseToNumber(findArrayIndex(logger, "original price", text.match(__priceRegex), 2));
     const originalPriceMsg = originalPrice.toFixed(2);
 
     const __currentPrice = findArrayIndex(logger, "discounted price", text.match(__priceRegex), 1);
-    const currentPrice = __currentPrice === "Free" ? 0 : parseFloat(__currentPrice);
+    const currentPrice = __currentPrice === "Free" ? 0 : parseToNumber(__currentPrice);
     const currentPriceMsg = __currentPrice === "Free" ? "FREE" : currentPrice.toFixed(2);
 
-    const discount = parseFloat(findArrayIndex(logger, "discount percent", text.match(/\[(\d+)%/), 1)); // discount percent
+    const discount = parseToNumber(findArrayIndex(logger, "discount percent", text.match(/\[(\d+)%/), 1)); // discount percent
     const discountMsg = discount.toFixed(2);
 
-    const rating = parseInt(findArrayIndex(logger, "rating", text.match(/Rating: (\d+)/), 1));
+    const rating = parseToNumber(findArrayIndex(logger, "rating", text.match(/Rating: (\d+)/), 1));
 
     // [1] -> download counter from appAgg website
     // [2] -> rating counter from app store / play store
-    const download = parseInt(findArrayIndex(logger, "download", text.match(/Downloads: (\d+) \+ (\d+)/), 2));
+    const download = parseToNumber(findArrayIndex(logger, "download", text.match(/Downloads: (\d+) \+ (\d+)/), 2));
     
     const errorMsg = only({download, discount, originalPrice, platform, currentPrice});
     if (!errorMsg) {
