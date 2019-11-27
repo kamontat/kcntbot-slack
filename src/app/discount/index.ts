@@ -20,7 +20,7 @@ const only = (data: {platform: string, download: number, discount: number, origi
   return undefined;
 }
 
-const parseToNumber = (str: String) => {
+const parseToNumber = (str: string) => {
   const num = parseFloat(str)
 
   if (isNaN(num)) return 0
